@@ -1,0 +1,16 @@
+---
+title: Assignment 10
+author: Katy Linich
+date: 21 April 2020
+output: html_notebook
+---
+
+#1-------------------------------------------------------------------------------------------------
+```{r}
+library(tidyverse)
+```
+```{r}
+ELA_data <- read_csv("Johnson Elementary ELA Project.csv")
+
+```
+
