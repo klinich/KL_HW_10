@@ -13,11 +13,23 @@ library(tidyverse)
 ELA_data <- read_csv("Johnson Elementary ELA Project.csv", skip = 3)
 ELA_data <- fill(ELA_data, X1, .direction = c("down"))
 ELA_data <- drop_na(ELA_data)
+ELA_data <- rename(ELA_data, Room=X1)
 ELA_data
                      
 new_ELA_data <- ELA_data %>%
                   separate(`Tardies; Absences`, into = c('Tardies', 'Absences'), convert = TRUE)
 
 new_ELA_data
+```
+
+#2-------------------------------------------------------------------------------------------------
+
+```{r}
+ELA_by_room <- new_ELA_data %>%
+  group_by(Room)
+
+ELA_by_room %>%
+  summarise('Avg Tardies'=mean(Tardies), 'Avg Absences'=mean(Absences))
+  
 ```
 
