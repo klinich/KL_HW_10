@@ -33,3 +33,11 @@ ELA_by_room %>%
   
 ```
 
+#3-------------------------------------------------------------------------------------------------
+Write a script to show the frequency of missing data points for each quarter by room
+
+```{r}
+ELA_by_room %>%
+  summarise("1st Q Missing" = sum(is.na(`1st Quarter`)), "2nd Q Missing"=sum(is.na(`2nd Quarter`)), "3rd Q Missing"=sum(is.na(`3rd Quarter`)),"4th Q Missing"=sum(is.na(`4th Quarter`)))
+```
+
