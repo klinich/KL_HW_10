@@ -10,7 +10,14 @@ output: html_notebook
 library(tidyverse)
 ```
 ```{r}
-ELA_data <- read_csv("Johnson Elementary ELA Project.csv")
+ELA_data <- read_csv("Johnson Elementary ELA Project.csv", skip = 3)
+ELA_data <- fill(ELA_data, X1, .direction = c("down"))
+ELA_data <- drop_na(ELA_data)
+ELA_data
+                     
+new_ELA_data <- ELA_data %>%
+                  separate(`Tardies; Absences`, into = c('Tardies', 'Absences'), convert = TRUE)
 
+new_ELA_data
 ```
 
