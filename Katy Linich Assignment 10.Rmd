@@ -37,7 +37,26 @@ ELA_by_room %>%
 Write a script to show the frequency of missing data points for each quarter by room
 
 ```{r}
-ELA_by_room %>%
+ELA_missing <- ELA_data %>%
+  group_by(Room)%>%
   summarise("1st Q Missing" = sum(is.na(`1st Quarter`)), "2nd Q Missing"=sum(is.na(`2nd Quarter`)), "3rd Q Missing"=sum(is.na(`3rd Quarter`)),"4th Q Missing"=sum(is.na(`4th Quarter`)))
+ELA_missing
 ```
+
+#4-------------------------------------------------------------------------------------------------
+```{r}
+ELA_data_quarters <- ELA_data %>%
+   gather('1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter', 
+          key = "Quarter", value = "Rating") %>%
+  group_by(Room, Quarter) %>%
+  summarise(medians=median(Rating))
+ELA_data_quarters
+
+ggplot(ELA_data_quarters, aes(Quarter, medians, color=Room)) + geom_point()
+
+```
+
+#5-------------------------------------------------------------------------------------------------
+Use the NYC flights data to construct a graph that compares carriers in terms of theproportion of 2013 flights that arrived on time when traveling from New York City toAtlanta. Your graph should include a title and easy-to-read labels, including the namesof airlines rather than airline codes. 
+
 
