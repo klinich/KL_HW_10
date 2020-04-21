@@ -59,4 +59,16 @@ ggplot(ELA_data_quarters, aes(Quarter, medians, color=Room)) + geom_point()
 #5-------------------------------------------------------------------------------------------------
 Use the NYC flights data to construct a graph that compares carriers in terms of theproportion of 2013 flights that arrived on time when traveling from New York City toAtlanta. Your graph should include a title and easy-to-read labels, including the namesof airlines rather than airline codes. 
 
+```{r}
+flights <- read_csv("NYC FLights 2013.csv")
+
+flights_by_dest <- flights %>%
+  filter(dest=="ATL") %>%
+  mutate(prompt=(arr_delay==0))
+flights_by_dest
+
+ggplot(flights_by_dest, aes(x=carrier)) + geom_bar(aes(fill=prompt)) + scale_x_discrete(labels= c("9E"="Endeavor Air","DL"="Delta", "EV"="ExpressJet", "FL"="AirTran", "MQ"="Envoy Air", "UA"="United Airlines", "WN"="Southwest"), name= c("Airline")) + labs(title= "Proportion of On Time Flights From NYC to Atlanta in 2013") + scale_fill_discrete(labels=c("Late", "On Time"))
+  
+```
+
 
