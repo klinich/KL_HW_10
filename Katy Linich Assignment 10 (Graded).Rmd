@@ -1,0 +1,79 @@
+---
+title: Assignment 10
+author: Katy Linich
+date: 21 April 2020
+output: html_notebook
+---
+
+#1-------------------------------------------------------------------------------------------------
+```{r}
+library(tidyverse)
+```
+```{r}
+ELA_data <- read_csv("Johnson Elementary ELA Project.csv", skip = 3)
+ELA_data <- fill(ELA_data, X1, .direction = c("down"))
+ELA_data <- drop_na(ELA_data)
+ELA_data <- rename(ELA_data, Room=X1)
+ELA_data
+                     
+new_ELA_data <- ELA_data %>%
+                  separate(`Tardies; Absences`, into = c('Tardies', 'Absences'), convert = TRUE)
+
+new_ELA_data
+```
+
+#2-------------------------------------------------------------------------------------------------
+
+```{r}
+ELA_by_room <- new_ELA_data %>%
+  group_by(Room)
+
+ELA_by_room %>%
+  summarise('Avg Tardies'=mean(Tardies), 'Avg Absences'=mean(Absences))
+  
+```
+
+#3-------------------------------------------------------------------------------------------------
+Write a script to show the frequency of missing data points for each quarter by room
+
+```{r}
+ELA_missing <- ELA_data %>%
+  group_by(Room)%>%
+  summarise("1st Q Missing" = sum(is.na(`1st Quarter`)), "2nd Q Missing"=sum(is.na(`2nd Quarter`)), "3rd Q Missing"=sum(is.na(`3rd Quarter`)),"4th Q Missing"=sum(is.na(`4th Quarter`)))
+ELA_missing
+```
+
+#4-------------------------------------------------------------------------------------------------
+
+**This does not show the trend very well. (-5)**
+
+```{r}
+ELA_data_quarters <- ELA_data %>%
+   gather('1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter', 
+          key = "Quarter", value = "Rating") %>%
+  group_by(Room, Quarter) %>%
+  summarise(medians=median(Rating))
+ELA_data_quarters
+
+ggplot(ELA_data_quarters, aes(Quarter, medians, color=Room)) + geom_point()
+
+```
+
+#5-------------------------------------------------------------------------------------------------
+Use the NYC flights data to construct a graph that compares carriers in terms of theproportion of 2013 flights that arrived on time when traveling from New York City toAtlanta. Your graph should include a title and easy-to-read labels, including the namesof airlines rather than airline codes. 
+
+**This is labeled as "proportions" (which it should be), but you are showing frequencies. (-5)**
+
+```{r}
+flights <- read_csv("NYC FLights 2013.csv")
+
+flights_by_dest <- flights %>%
+  filter(dest=="ATL") %>%
+  mutate(prompt=(arr_delay==0))
+flights_by_dest
+
+ggplot(flights_by_dest, aes(x=carrier)) + geom_bar(aes(fill=prompt)) + scale_x_discrete(labels= c("9E"="Endeavor Air","DL"="Delta", "EV"="ExpressJet", "FL"="AirTran", "MQ"="Envoy Air", "UA"="United Airlines", "WN"="Southwest"), name= c("Airline")) + labs(title= "Proportion of On Time Flights From NYC to Atlanta in 2013") + scale_fill_discrete(labels=c("Late", "On Time"))
+  
+```
+
+
